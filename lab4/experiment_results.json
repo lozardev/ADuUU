@@ -1,0 +1,141 @@
+{
+  "model_name": "Soft Voting (LogisticRegression + RandomForest + GradientBoosting)",
+  "split": {
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratify": true
+  },
+  "selection_criterion": "mean 5-fold CV ROC-AUC on train",
+  "test_metrics": {
+    "roc_auc": 0.8352380952380953,
+    "accuracy": 0.795,
+    "precision": 0.8235294117647058,
+    "recall": 0.9,
+    "f1": 0.8600682593856656
+  },
+  "cv_roc_auc": 0.786,
+  "experiments": [
+    {
+      "model": "LogisticRegression (база из лабы 3)",
+      "cv_roc_auc": 0.7705,
+      "cv_std": 0.049,
+      "test_roc_auc": 0.8086,
+      "accuracy": 0.77,
+      "precision": 0.8013,
+      "recall": 0.8929,
+      "f1": 0.8446
+    },
+    {
+      "model": "RandomForest (по умолчанию, 100 деревьев)",
+      "cv_roc_auc": 0.7695,
+      "cv_std": 0.031,
+      "test_roc_auc": 0.8158,
+      "accuracy": 0.815,
+      "precision": 0.8121,
+      "recall": 0.9571,
+      "f1": 0.8787
+    },
+    {
+      "model": "RandomForest (500, min_samples_leaf=3)",
+      "cv_roc_auc": 0.7751,
+      "cv_std": 0.0372,
+      "test_roc_auc": 0.8279,
+      "accuracy": 0.795,
+      "precision": 0.8037,
+      "recall": 0.9357,
+      "f1": 0.8647
+    },
+    {
+      "model": "ExtraTrees (500, min_samples_leaf=3)",
+      "cv_roc_auc": 0.7753,
+      "cv_std": 0.0378,
+      "test_roc_auc": 0.8231,
+      "accuracy": 0.79,
+      "precision": 0.7988,
+      "recall": 0.9357,
+      "f1": 0.8618
+    },
+    {
+      "model": "AdaBoost (200, lr=0.5)",
+      "cv_roc_auc": 0.7697,
+      "cv_std": 0.0313,
+      "test_roc_auc": 0.8214,
+      "accuracy": 0.775,
+      "precision": 0.795,
+      "recall": 0.9143,
+      "f1": 0.8505
+    },
+    {
+      "model": "GradientBoosting (по умолчанию)",
+      "cv_roc_auc": 0.7714,
+      "cv_std": 0.0263,
+      "test_roc_auc": 0.8198,
+      "accuracy": 0.79,
+      "precision": 0.8267,
+      "recall": 0.8857,
+      "f1": 0.8552
+    },
+    {
+      "model": "GradientBoosting (300, lr=0.03, depth=3, subsample=0.8)",
+      "cv_roc_auc": 0.7752,
+      "cv_std": 0.0276,
+      "test_roc_auc": 0.8333,
+      "accuracy": 0.785,
+      "precision": 0.8255,
+      "recall": 0.8786,
+      "f1": 0.8512
+    },
+    {
+      "model": "HistGradientBoosting (по умолчанию)",
+      "cv_roc_auc": 0.7597,
+      "cv_std": 0.0169,
+      "test_roc_auc": 0.7736,
+      "accuracy": 0.77,
+      "precision": 0.8176,
+      "recall": 0.8643,
+      "f1": 0.8403
+    },
+    {
+      "model": "MLP (32 нейрона, alpha=1.0)",
+      "cv_roc_auc": 0.7545,
+      "cv_std": 0.0423,
+      "test_roc_auc": 0.7881,
+      "accuracy": 0.785,
+      "precision": 0.8129,
+      "recall": 0.9,
+      "f1": 0.8542
+    },
+    {
+      "model": "Stacking (RF + GB + LR -> LR)",
+      "cv_roc_auc": 0.785,
+      "cv_std": 0.0396,
+      "test_roc_auc": 0.8358,
+      "accuracy": 0.795,
+      "precision": 0.8235,
+      "recall": 0.9,
+      "f1": 0.8601
+    },
+    {
+      "model": "Soft Voting (LR + RF + GB) — выбранная",
+      "cv_roc_auc": 0.786,
+      "cv_std": 0.039,
+      "test_roc_auc": 0.8352,
+      "accuracy": 0.795,
+      "precision": 0.8235,
+      "recall": 0.9,
+      "f1": 0.8601
+    }
+  ],
+  "stability_10_splits": {
+    "voting": {
+      "mean": 0.8041071428571428,
+      "min": 0.7513095238095238,
+      "max": 0.8403571428571428
+    },
+    "logreg": {
+      "mean": 0.7861309523809524,
+      "min": 0.7329761904761906,
+      "max": 0.8230952380952381
+    }
+  }
+}
