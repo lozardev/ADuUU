@@ -1,13 +1,11 @@
 """Задание 3. Измерение времени тензорных операций на CPU и CUDA."""
 
 import time
-from statistics import median
 
 import torch
 
 
 SHAPES = ((64, 1024, 1024), (128, 512, 512), (256, 256, 256))
-SAMPLES = 3
 
 
 def operations_for(a, b):
@@ -30,33 +28,24 @@ def operations_for(a, b):
 
 
 def measure_ms(operation, device, repetitions):
-    """Прогреть операцию и вернуть медианное время одного вызова в мс."""
+    """Прогреть операцию и вернуть время одного вызова в миллисекундах."""
     operation()
-    use_cuda = device.type == "cuda"
-    if use_cuda:
-        torch.cuda.synchronize(device)
-        start_event = torch.cuda.Event(enable_timing=True)
-        end_event = torch.cuda.Event(enable_timing=True)
-        stream = torch.cuda.current_stream(device)
-
-    samples = []
-    for _ in range(SAMPLES):
-        if use_cuda:
-            start_event.record(stream)
-        else:
-            start_time = time.time()
-
+    if device.type == "cpu":
+        start = time.time()
         for _ in range(repetitions):
             operation()
+        return (time.time() - start) * 1_000 / repetitions
 
-        if use_cuda:
-            end_event.record(stream)
-            end_event.synchronize()
-            elapsed_ms = start_event.elapsed_time(end_event)
-        else:
-            elapsed_ms = (time.time() - start_time) * 1_000
-        samples.append(elapsed_ms / repetitions)
-    return median(samples)
+    stream = torch.cuda.current_stream(device)
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record(stream)
+    for _ in range(repetitions):
+        operation()
+    end_event.record(stream)
+    # Событие конца должно выполниться на GPU до чтения времени.
+    end_event.synchronize()
+    return start_event.elapsed_time(end_event) / repetitions
 
 
 def check_operations(device):

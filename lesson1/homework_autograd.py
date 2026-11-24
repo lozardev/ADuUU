@@ -54,13 +54,13 @@ def mse_gradients():
 
 def chain_rule():
     """Сверить backward и autograd.grad с производной составной функции."""
-    x_value = 1.0
-    x = torch.tensor(x_value, requires_grad=True)
-    result = torch.sin(x.square() + 1)
-    (gradient,) = torch.autograd.grad(result, x, retain_graph=True)
+    x = torch.tensor(1.0, requires_grad=True)
+    result = torch.sin(x**2 + 1)
     result.backward()
 
-    expected = torch.tensor(2 * x_value * math.cos(x_value**2 + 1))
+    # Вычисляем функцию заново для второго способа расчёта градиента.
+    gradient = torch.autograd.grad(torch.sin(x**2 + 1), x)[0]
+    expected = torch.tensor(2 * math.cos(2))
     torch.testing.assert_close(x.grad, gradient)
     torch.testing.assert_close(gradient, expected)
     print(f"2.3 backward = {x.grad.item():.6f}, autograd.grad = {gradient.item():.6f}")

@@ -18,8 +18,10 @@ def create_tensors():
     torch.testing.assert_close(sequence[-1], torch.tensor([12, 13, 14, 15]))
 
     for label, tensor in (
-        ("Случайные числа", random_values), ("Нули", zeros),
-        ("Единицы", ones), ("Числа от 0 до 15", sequence),
+        ("Случайные числа", random_values),
+        ("Нули", zeros),
+        ("Единицы", ones),
+        ("Числа от 0 до 15", sequence),
     ):
         print(f"{label}, форма {tuple(tensor.shape)}\n{tensor}")
 
@@ -38,22 +40,46 @@ def tensor_operations(a, b):
 
 
 def show_operations():
-    """Выполнить операции с матрицами 3×4 и 4×3 и сверить результаты."""
+    """Выполнить операции с матрицами 3x4 и 4x3 и сверить результаты."""
     a = torch.arange(1, 13).reshape(3, 4)
     b = torch.arange(1, 13).reshape(4, 3)
     transposed, product, elementwise, total = tensor_operations(a, b)
 
-    torch.testing.assert_close(transposed, torch.tensor([
-        [1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12],
-    ]))
-    torch.testing.assert_close(product, torch.tensor([
-        [70, 80, 90], [158, 184, 210], [246, 288, 330],
-    ]))
-    torch.testing.assert_close(elementwise, torch.tensor([
-        [1, 8, 21, 40], [10, 30, 56, 88], [27, 60, 99, 144],
-    ]))
+    torch.testing.assert_close(
+        transposed,
+        torch.tensor(
+            [
+                [1, 5, 9],
+                [2, 6, 10],
+                [3, 7, 11],
+                [4, 8, 12],
+            ]
+        ),
+    )
+    torch.testing.assert_close(
+        product,
+        torch.tensor(
+            [
+                [70, 80, 90],
+                [158, 184, 210],
+                [246, 288, 330],
+            ]
+        ),
+    )
+    torch.testing.assert_close(
+        elementwise,
+        torch.tensor(
+            [
+                [1, 8, 21, 40],
+                [10, 30, 56, 88],
+                [27, 60, 99, 144],
+            ]
+        ),
+    )
     assert total.item() == 78
-    print(f"A.T\n{transposed}\nA @ B\n{product}\nA * B.T\n{elementwise}\nСумма A = {total.item()}")
+    print(
+        f"A.T\n{transposed}\nA @ B\n{product}\nA * B.T\n{elementwise}\nСумма A = {total.item()}"
+    )
 
 
 def show_slices():
@@ -61,7 +87,7 @@ def show_slices():
     tensor = torch.arange(125).reshape(5, 5, 5)
     first_row = tensor[:, 0, :]
     last_column = tensor[:, :, -1]
-    # Берём центральный слой и блок 2×2 с индексом 2 в нижнем правом углу.
+    # Берём центральный слой и блок 2x2 с индексом 2 в нижнем правом углу.
     central_block = tensor[2, 1:3, 1:3]
     even_indices = tensor[::2, ::2, ::2]
 
@@ -74,7 +100,7 @@ def show_slices():
     for label, values in (
         ("Первая строка каждого слоя", first_row),
         ("Последний столбец каждого слоя", last_column),
-        ("Блок 2×2 в центральном слое", central_block),
+        ("Блок 2x2 в центральном слое", central_block),
         ("Чётные индексы по всем осям", even_indices),
     ):
         print(f"{label}\n{values}")
@@ -93,14 +119,14 @@ def show_reshapes():
 def main():
     """Запустить примеры и проверки всех четырёх подпунктов."""
     torch.manual_seed(42)
-    for title, example in (
-        ("1.1 Создание тензоров", create_tensors),
-        ("1.2 Операции", show_operations),
-        ("1.3 Срезы", show_slices),
-        ("1.4 Формы", show_reshapes),
-    ):
-        print(f"\n{title}")
-        example()
+    print("\n1.1 Создание тензоров")
+    create_tensors()
+    print("\n1.2 Операции")
+    show_operations()
+    print("\n1.3 Срезы")
+    show_slices()
+    print("\n1.4 Формы")
+    show_reshapes()
     print("\nПроверки тензоров пройдены.")
 
 
